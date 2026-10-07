@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AidPage 패치 노트</title>
+<meta name="description" content="AidPage(재난 지원제도 안내)의 변경 기록. 날짜별로 무엇이 바뀌었는지 사용자 눈높이로 적습니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a5fc4'/%3E%3Ctext x='16' y='22' font-size='17' font-weight='700' font-family='sans-serif' text-anchor='middle' fill='%23fff'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<style>
+:root{--ink:#1a5fc4;--gold:#9a7328;--bg:#f7f9fc;--line:#e3e8ef;--text:#1d2733;--mute:#6b7a90}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Pretendard",system-ui,sans-serif;color:var(--text);background:#fff;line-height:1.55;font-size:15.5px}
+header{border-bottom:1px solid var(--line);background:var(--bg)}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+header .wrap{display:flex;align-items:center;gap:12px;height:58px}
+.brand{font-weight:800;font-size:1.15rem;color:var(--text);text-decoration:none}.brand b{color:var(--ink)}
+.brand small{font-weight:500;color:var(--mute);margin-left:6px}
+header a.app{margin-left:auto;font-size:.9rem;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:6px 11px;background:#fff}
+.hero{padding:26px 0 8px}
+h1{font-size:1.6rem;margin:0 0 6px;letter-spacing:-.01em}
+.lead{color:var(--mute);margin:0 0 16px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 18px}
+.tools input{flex:1;min-width:180px;height:38px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font:inherit}
+.tag{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font-size:.82rem;color:var(--mute);cursor:pointer}
+.tag.is-on{background:var(--ink);border-color:var(--ink);color:#fff}
+.mile{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin:0 0 26px}
+.mile div{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);font-size:.9rem}
+.mile time{display:block;font-size:.78rem;color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums}
+.entry{display:grid;grid-template-columns:118px 1fr;gap:14px;padding:16px 0;border-top:1px solid var(--line)}
+.entry time{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.entry .ver{display:block;font-size:.76rem;color:var(--mute);font-family:ui-monospace,Menlo,monospace}
+.entry h2{font-size:1.05rem;margin:0 0 6px}
+.entry ul{margin:0 0 8px;padding-left:18px}.entry li{margin:2px 0}
+.entry .tags span{display:inline-block;font-size:.76rem;color:var(--mute);background:var(--bg);border-radius:6px;padding:1px 7px;margin:0 4px 4px 0}
+.entry .commits{font-size:.74rem;color:var(--mute);font-family:ui-monospace,Menlo,monospace}
+.entry .commits a{color:inherit}
+.entry h2{cursor:pointer}.entry h2::after{content:' ▸';color:var(--mute);font-weight:400}.entry.is-open h2::after{content:' ▾'}
+.entry h2:hover{color:var(--ink)}
+.detail{display:none;margin:10px 0 6px;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:12px 14px}
+.entry.is-open .detail{display:block}
+.detail h3{font-size:.8rem;color:var(--gold);margin:8px 0 4px;letter-spacing:.02em}.detail h3:first-child{margin-top:0}
+.detail p{margin:0 0 4px}.detail ul{margin:0;padding-left:18px}.detail li{margin:3px 0}
+.detail .arrow{color:var(--ink);font-weight:700}
+.detail .cm{font-size:.82rem;color:var(--mute)}.detail .cm code{font-family:ui-monospace,Menlo,monospace;background:#fff;border:1px solid var(--line);border-radius:5px;padding:0 5px;margin-right:4px}
+.detail .nodetail{color:var(--mute);font-size:.88rem}
+footer{color:var(--mute);font-size:.84rem;padding:30px 0 40px;border-top:1px solid var(--line);margin-top:20px}
+.empty{color:var(--mute);padding:30px 0}
+@media (max-width:600px){.entry{grid-template-columns:1fr;gap:4px}body{font-size:15px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="./"><b>A</b>id<b>P</b>age<small>패치 노트</small></a><a class="app" href="https://5-jihwan.github.io/aidpage/" target="_blank" rel="noopener">앱 열기 ↗</a></div></header>
+<main class="wrap">
+  <section class="hero">
+    <h1>무엇이 바뀌었나</h1>
+    <p class="lead">날짜별 변경 기록입니다. 제목을 누르면 왜 바꿨는지, 무엇이 어떻게 바뀌었는지가 펼쳐집니다. 지원 기준(법령·고시)의 변경 이력은 앱 안 '방법·한계' 탭(<a href="https://5-jihwan.github.io/aidpage/">앱 열기</a>)에 따로 있습니다.</p>
+    <div class="tools"><input id="q" type="search" placeholder="검색 (예: 대피소, 인쇄, 모바일)" aria-label="검색"><div id="tags"></div></div>
+    <div class="mile" id="mile"></div>
+  </section>
+  <section id="list" aria-live="polite"></section>
+</main>
+<footer class="wrap"><span id="gen"></span> · 기록은 <a href="https://github.com/5-Jihwan/aidpage/commits/main">앱 저장소의 커밋</a>에서 뽑아 사용자 말로 다시 적은 것입니다. 자동 갱신 커밋(실시간 자료·법령 수집)은 뺐습니다.</footer>
+<script>
+const $ = s => document.querySelector(s), esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const REPO = 'https://github.com/5-Jihwan/aidpage/commit/';
+let data, tag = '';
+fetch('notes.json').then(r => r.json()).then(d => { data = d; init(); }).catch(() => { $('#list').innerHTML = '<p class="empty">notes.json을 불러오지 못했습니다.</p>'; });
+function init() {
+  $('#gen').textContent = `${data.generated} 생성`;
+  $('#mile').innerHTML = (data.milestones || []).map(m => `<div><time>${esc(m.date)}</time>${esc(m.text)}</div>`).join('');
+  const tags = [...new Set(data.entries.flatMap(e => e.tags || []))];
+  $('#tags').innerHTML = tags.map(t => `<button type="button" class="tag" data-t="${esc(t)}">${esc(t)}</button>`).join('');
+  $('#tags').addEventListener('click', e => { const b = e.target.closest('.tag'); if (!b) return; tag = tag === b.dataset.t ? '' : b.dataset.t; document.querySelectorAll('.tag').forEach(x => x.classList.toggle('is-on', x.dataset.t === tag)); render(); });
+  $('#q').addEventListener('input', render);
+  render();
+}
+function render() {
+  const q = $('#q').value.trim().toLowerCase();
+  const rows = data.entries.filter(e => (!tag || (e.tags || []).includes(tag)) && (!q || (e.title + ' ' + (e.items || []).join(' ')).toLowerCase().includes(q)));
+  const open = location.hash.slice(1);
+  $('#list').innerHTML = rows.length ? rows.map(e => `<article class="entry${e.date === open ? ' is-open' : ''}" id="${esc(e.date)}"><div><time>${esc(e.date)}</time>${e.version ? `<span class="ver">${esc(e.version)}</span>` : ''}</div><div><h2 title="눌러서 자세히">${esc(e.title)}</h2><ul>${(e.items || []).map(i => `<li>${esc(i)}</li>`).join('')}</ul>${detailHTML(e)}<div class="tags">${(e.tags || []).map(t => `<span>${esc(t)}</span>`).join('')}</div></div></article>`).join('') : '<p class="empty">해당하는 기록이 없습니다.</p>';
+  if (open && $('#' + CSS.escape(open))) $('#' + CSS.escape(open)).scrollIntoView();
+}
+/* "전: … → 후: …" 꼴이면 화살표만 강조 */
+const howLi = h => { const m = String(h).match(/^(전:.*?)\s*→\s*(후:.*)$/); return m ? `<li>${esc(m[1])} <span class="arrow">→</span> ${esc(m[2])}</li>` : `<li>${esc(h)}</li>`; };
+function detailHTML(e) {
+  const d = e.detail, cms = (d && d.commits && d.commits.length ? d.commits : (e.commits || []).map(h => ({ hash: h, msg: '' })));
+  const cmHTML = `<h3>원 커밋</h3><p class="cm">${cms.map(c => `<a href="${REPO}${esc(c.hash)}" target="_blank" rel="noopener"><code>${esc(c.hash)}</code></a>${esc(c.msg || '')}`).join('<br>')}</p>`;
+  if (!d) return `<div class="detail"><p class="nodetail">자세한 설명은 준비 중입니다.</p>${cmHTML}</div>`;
+  return `<div class="detail"><h3>왜 바꿨나</h3><p>${esc(d.why || '')}</p><h3>무엇이 어떻게 바뀌었나</h3><ul>${(d.how || []).map(howLi).join('')}</ul><h3>어디서 보나</h3><p>${esc(d.where || '')}</p>${cmHTML}</div>`;
+}
+document.addEventListener('click', e => { const h = e.target.closest('.entry h2'); if (!h) return; const a = h.closest('.entry'); a.classList.toggle('is-open'); history.replaceState(null, '', a.classList.contains('is-open') ? '#' + a.id : location.pathname); });
+window.addEventListener('hashchange', render);
+</script>
+</body>
+</html>
