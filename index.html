@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AidPage 패치 노트</title>
-<meta name="description" content="AidPage(재난 지원제도 안내)의 변경 기록. 날짜별로 무엇이 바뀌었는지 사용자 눈높이로 적습니다.">
+<meta name="description" content="AidPage · AidPage Atlas · AidPage Simulator의 변경 기록. 프로젝트별로 무엇이 바뀌었는지 사용자 눈높이로 적습니다.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a5fc4'/%3E%3Ctext x='16' y='22' font-size='17' font-weight='700' font-family='sans-serif' text-anchor='middle' fill='%23fff'%3EA%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
 <style>
@@ -46,15 +46,23 @@ h1{font-size:1.6rem;margin:0 0 6px;letter-spacing:-.01em}
 .detail .nodetail{color:var(--mute);font-size:.88rem}
 footer{color:var(--mute);font-size:.84rem;padding:30px 0 40px;border-top:1px solid var(--line);margin-top:20px}
 .empty{color:var(--mute);padding:30px 0}
+.projs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.proj{flex:1 1 170px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;cursor:pointer;font:inherit;color:var(--text);border-top:4px solid var(--pc,#c9d3e1)}
+.proj b{display:block;font-size:.98rem}.proj small{display:block;color:var(--mute);font-size:.78rem;line-height:1.35;margin-top:2px}.proj i{font-style:normal;float:right;color:var(--mute);font-size:.8rem;font-variant-numeric:tabular-nums}
+.proj.is-on{background:var(--bg);box-shadow:0 0 0 2px var(--pc,var(--ink)) inset}
+.proj-info{font-size:.88rem;color:var(--mute);margin:-4px 0 14px}.proj-info a{color:var(--ink)}
+.pbadge{display:inline-block;font-size:.72rem;font-weight:700;color:#fff;background:var(--pc);border-radius:6px;padding:1px 7px;margin:0 6px 4px 0;vertical-align:2px}
+.mile time .pbadge{margin-left:6px}
 @media (max-width:600px){.entry{grid-template-columns:1fr;gap:4px}body{font-size:15px}}
 </style>
 </head>
 <body>
-<header><div class="wrap"><a class="brand" href="./"><b>A</b>id<b>P</b>age<small>패치 노트</small></a><a class="app" href="https://5-jihwan.github.io/aidpage/" target="_blank" rel="noopener">앱 열기 ↗</a></div></header>
+<header><div class="wrap"><a class="brand" href="./"><b>A</b>id<b>P</b>age<small>패치 노트 · AidPage / Atlas / Simulator</small></a><a class="app" href="https://5-jihwan.github.io/aidpage/" target="_blank" rel="noopener">앱 열기 ↗</a></div></header>
 <main class="wrap">
   <section class="hero">
     <h1>무엇이 바뀌었나</h1>
-    <p class="lead">날짜별 변경 기록입니다. 제목을 누르면 왜 바꿨는지, 무엇이 어떻게 바뀌었는지가 펼쳐집니다. 지원 기준(법령·고시)의 변경 이력은 앱 안 '방법·한계' 탭(<a href="https://5-jihwan.github.io/aidpage/">앱 열기</a>)에 따로 있습니다.</p>
+    <div class="projs" id="projs" role="tablist" aria-label="프로젝트"></div><p class="proj-info" id="projInfo"></p>
+    <p class="lead">한 노트에 세 프로젝트(본 사이트 AidPage, 도감 Atlas, 대피 접근 계산 Simulator)를 함께 적고, 위에서 프로젝트를 골라 따로 볼 수 있습니다. 제목을 누르면 왜 바꿨는지, 무엇이 어떻게 바뀌었는지가 펼쳐집니다. 지원 기준(법령·고시)의 변경 이력은 앱 안 '방법·한계' 탭(<a href="https://5-jihwan.github.io/aidpage/">앱 열기</a>)에 따로 있습니다.</p>
     <div class="tools"><input id="q" type="search" placeholder="검색 (예: 대피소, 인쇄, 모바일)" aria-label="검색"><div id="tags"></div></div>
     <div class="mile" id="mile"></div>
   </section>
@@ -64,22 +72,32 @@ footer{color:var(--mute);font-size:.84rem;padding:30px 0 40px;border-top:1px sol
 <script>
 const $ = s => document.querySelector(s), esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const REPO = 'https://github.com/5-Jihwan/aidpage/commit/';
-let data, tag = '';
+let data, tag = '', proj = '';
+const PJ = id => (data.projects || []).find(p => p.id === id) || { id, name: id, color: '#6b7a90' };
+const inProj = x => !proj || (x.project || 'aidpage') === proj;
 fetch('notes.json').then(r => r.json()).then(d => { data = d; init(); }).catch(() => { $('#list').innerHTML = '<p class="empty">notes.json을 불러오지 못했습니다.</p>'; });
 function init() {
   $('#gen').textContent = `${data.generated} 생성`;
-  $('#mile').innerHTML = (data.milestones || []).map(m => `<div><time>${esc(m.date)}</time>${esc(m.text)}</div>`).join('');
-  const tags = [...new Set(data.entries.flatMap(e => e.tags || []))];
-  $('#tags').innerHTML = tags.map(t => `<button type="button" class="tag" data-t="${esc(t)}">${esc(t)}</button>`).join('');
+  const hp = new URLSearchParams(location.search).get('p'); if (hp && PJ(hp).name !== hp) proj = hp;
+  $('#projs').innerHTML = [{ id: '', name: '전체', desc: '세 프로젝트 모두', color: '#6b7a90' }, ...(data.projects || [])].map(p => `<button type="button" class="proj${p.id === proj ? ' is-on' : ''}" role="tab" aria-selected="${p.id === proj}" data-p="${p.id}" style="--pc:${p.color}"><i>${data.entries.filter(e => !p.id || (e.project || 'aidpage') === p.id).length}건</i><b>${esc(p.name)}</b><small>${esc(p.desc)}</small></button>`).join('');
+  $('#projs').addEventListener('click', e => { const b = e.target.closest('.proj'); if (!b) return; proj = b.dataset.p; tag = ''; document.querySelectorAll('.proj').forEach(x => { x.classList.toggle('is-on', x === b); x.setAttribute('aria-selected', x === b); }); history.replaceState(null, '', proj ? '?p=' + proj : location.pathname); paintSide(); render(); });
+  paintSide();
   $('#tags').addEventListener('click', e => { const b = e.target.closest('.tag'); if (!b) return; tag = tag === b.dataset.t ? '' : b.dataset.t; document.querySelectorAll('.tag').forEach(x => x.classList.toggle('is-on', x.dataset.t === tag)); render(); });
   $('#q').addEventListener('input', render);
   render();
 }
+function paintSide() {
+  const p = proj && PJ(proj);
+  $('#projInfo').innerHTML = p ? `${esc(p.desc)} · <a href="${esc(p.url)}" target="_blank" rel="noopener">열기 ↗</a>` : '';
+  $('#mile').innerHTML = (data.milestones || []).filter(inProj).map(m => `<div><time>${esc(m.date)}${proj ? '' : `<span class="pbadge" style="--pc:${PJ(m.project || 'aidpage').color}">${esc(PJ(m.project || 'aidpage').name.replace('AidPage ', ''))}</span>`}</time>${esc(m.text)}</div>`).join('');
+  const tags = [...new Set(data.entries.filter(inProj).flatMap(e => e.tags || []))];
+  $('#tags').innerHTML = tags.map(t => `<button type="button" class="tag${t === tag ? ' is-on' : ''}" data-t="${esc(t)}">${esc(t)}</button>`).join('');
+}
 function render() {
   const q = $('#q').value.trim().toLowerCase();
-  const rows = data.entries.filter(e => (!tag || (e.tags || []).includes(tag)) && (!q || (e.title + ' ' + (e.items || []).join(' ')).toLowerCase().includes(q)));
+  const rows = data.entries.filter(e => inProj(e) && (!tag || (e.tags || []).includes(tag)) && (!q || (e.title + ' ' + (e.items || []).join(' ')).toLowerCase().includes(q)));
   const open = location.hash.slice(1);
-  $('#list').innerHTML = rows.length ? rows.map(e => `<article class="entry${e.date === open ? ' is-open' : ''}" id="${esc(e.date)}"><div><time>${esc(e.date)}</time>${e.version ? `<span class="ver">${esc(e.version)}</span>` : ''}</div><div><h2 title="눌러서 자세히">${esc(e.title)}</h2><ul>${(e.items || []).map(i => `<li>${esc(i)}</li>`).join('')}</ul>${detailHTML(e)}<div class="tags">${(e.tags || []).map(t => `<span>${esc(t)}</span>`).join('')}</div></div></article>`).join('') : '<p class="empty">해당하는 기록이 없습니다.</p>';
+  $('#list').innerHTML = rows.length ? rows.map(e => { const pj = PJ(e.project || 'aidpage'), id = `${pj.id}-${e.date}`; return `<article class="entry${id === open || e.date === open ? ' is-open' : ''}" id="${esc(id)}"><div><time>${esc(e.date)}</time>${e.version ? `<span class="ver">${esc(e.version)}</span>` : ''}</div><div><span class="pbadge" style="--pc:${pj.color}">${esc(pj.name)}</span><h2 title="눌러서 자세히">${esc(e.title)}</h2><ul>${(e.items || []).map(i => `<li>${esc(i)}</li>`).join('')}</ul>${detailHTML(e)}<div class="tags">${(e.tags || []).map(t => `<span>${esc(t)}</span>`).join('')}</div></div></article>`; }).join('') : '<p class="empty">해당하는 기록이 없습니다.</p>';
   if (open && $('#' + CSS.escape(open))) $('#' + CSS.escape(open)).scrollIntoView();
 }
 /* "전: … → 후: …" 꼴이면 화살표만 강조 */
