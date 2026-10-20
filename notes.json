@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-15",
+ "generated": "2026-10-20",
  "milestones": [
   {
    "date": "2026-08-21",
@@ -83,6 +83,40 @@
   }
  ],
  "entries": [
+  {
+   "date": "2026-10-20",
+   "project": "atlas",
+   "version": "dex-v1.7 · 새 주소",
+   "title": "독립 사이트로 분리 — 새 주소 5-jihwan.github.io/aidpage-atlas/",
+   "tags": [
+    "결정",
+    "정리"
+   ],
+   "commits": [
+    "f26a54a"
+   ],
+   "items": [
+    "Atlas가 자기 주소를 갖게 됐습니다: https://5-jihwan.github.io/aidpage-atlas/ — 내용과 판(dex-v1.7, 타입 v1.4.2)은 그대로입니다",
+    "옛 주소(…/aidpage/atlas.html, dex.html)로 들어오면 새 주소의 같은 카드로 자동으로 넘어갑니다",
+    "본 사이트(AidPage)의 '이 지역은' 서랍과 설정 서랍에서 타입 표시와 도감 링크를 뺐습니다"
+   ],
+   "detail": {
+    "why": "본 사이트는 재난 지원 안내, Atlas는 시군구 프로파일이라 성격이 달라 주소와 저장소를 나눴습니다. 두 사이트의 변경 기록은 이 노트에 함께 남깁니다.",
+    "how": [
+     "전: 본 사이트 안의 atlas.html → 후: 새 저장소 aidpage-atlas의 독립 사이트(화면과 그 화면이 읽는 자료만, 행정경계는 그 시점 사본)",
+     "전: 본 사이트 '이 지역은'에 타입 칩·'왜 이 타입인가'·도감 링크 → 후: 지역 사실 정보만(지원 미리보기 3개는 그대로)",
+     "전: 설정 서랍에 '타입 도감' 링크 → 후: 없음",
+     "인용 파일(CITATION.cff)은 새 저장소로 옮기고 주소를 새 곳으로 바꿨습니다"
+    ],
+    "where": "https://5-jihwan.github.io/aidpage-atlas/ · 본 사이트 '이 지역은' 서랍·설정 서랍",
+    "commits": [
+     {
+      "hash": "f26a54a",
+      "msg": "도감(Atlas)을 AidPage에서 분리 — 새 주소, 옛 주소 자동 이동"
+     }
+    ]
+   }
+  },
   {
    "date": "2026-10-15",
    "project": "aidpage",
@@ -2981,14 +3015,14 @@
    "id": "atlas",
    "name": "AidPage Atlas",
    "desc": "시군구 256곳의 재난 프로파일 도감 — 순위 없는 설명형 분류",
-   "url": "https://5-jihwan.github.io/aidpage/atlas.html",
+   "url": "https://5-jihwan.github.io/aidpage-atlas/",
    "color": "#9a7328"
   },
   {
    "id": "sim",
    "name": "AidPage Simulator",
    "desc": "대피 접근 계산 — 걸어서 지정 시설에 닿는가(연구 트랙, 결과는 Atlas·문장 카드)",
-   "url": "https://5-jihwan.github.io/aidpage/atlas.html",
+   "url": "https://5-jihwan.github.io/aidpage-atlas/",
    "color": "#0f8a8a"
   }
  ]
